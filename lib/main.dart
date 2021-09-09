@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_treeview/flutter_treeview.dart';
@@ -11,13 +15,53 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Take Nodes',
-      home: MyHomePage(title: 'Take Nodes'),
+      home: MyHomePage(
+        title: 'Take Nodes',
+        storage: NodesStorage(),
+      ),
     );
   }
 }
 
+class NodesStorage {
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/nodes.txt');
+  }
+
+  Future<String> readNodes() async {
+    try {
+      final file = await _localFile;
+
+      // Read the file
+      final contents = await file.readAsString();
+
+      return contents;
+    } catch (e) {
+      // If encountering an error, return 0
+      return "";
+    }
+  }
+
+  Future<File> writeNodes(String nodesList) async {
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsString('$nodesList');
+  }
+}
+
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title, required this.storage})
+      : super(key: key);
+
+  final NodesStorage storage;
   final String title;
 
   @override
@@ -29,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String? _selectedNodeKey;
   List<Node> _nodes = [];
-  late TreeViewController _treeViewController;
+  TreeViewController _treeViewController = new TreeViewController();
   final Map<ExpanderPosition, Widget> expansionPositionOptions = const {
     ExpanderPosition.start: Text('Start'),
     ExpanderPosition.end: Text('End'),
@@ -68,11 +112,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void initState() {
-    _treeViewController = TreeViewController(
-      children: _nodes,
-      selectedKey: _selectedNodeKey,
-    );
     super.initState();
+    //_treeViewController = TreeViewController();
+    //String serializedNodes = _treeViewController.toString();
+    //_treeViewController.loadJSON(json: serializedNodes);
+    widget.storage.readNodes().then((String nodes) {
+      if (nodes.isNotEmpty) {
+        setState(() {
+          _treeViewController = _treeViewController.loadJSON(json: nodes);
+          _nodes = _treeViewController.children;
+        });
+      }
+    });
   }
 
   ListTile _makeExpanderPosition() {
@@ -313,6 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_selectedNodeKey == null) {
         setState(() {
           _treeViewController.children.add(newNode);
+          widget.storage.writeNodes(_treeViewController.toString());
         });
       } else {
         if (isEdit == true) {
@@ -320,6 +372,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _treeViewController = _treeViewController.copyWith(
                 children:
                     _treeViewController.updateNode(selectedNode!.key, newNode));
+            widget.storage.writeNodes(_treeViewController.toString());
           });
         } else {
           Node? selectedNode = _treeViewController.selectedNode;
@@ -331,6 +384,7 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(() {
             _treeViewController =
                 _treeViewController.copyWith(children: updated);
+            widget.storage.writeNodes(_treeViewController.toString());
           });
           _expandNode(_treeViewController.selectedNode!.key, true);
         }
@@ -376,6 +430,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       _selectedNodeKey = null;
                       _treeViewController =
                           _treeViewController.copyWith(selectedKey: "");
+                      widget.storage.writeNodes(_treeViewController.toString());
                     });
 
                     Navigator.pop(context);
