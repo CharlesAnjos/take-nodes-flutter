@@ -3,10 +3,14 @@
 A note-taking app with a hierarquical twist. Made in flutter.
 
 ## To do
-* make UI tolerable
+* proper settings screen
+    * persist settings
 * add bells and whistles
+    * add ability create different lists
+    * add visual options
 
 ## Done
+* make UI tolerable
 * add persistency
 * basic listing functions
 * basic crud functions
