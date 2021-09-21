@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         title: 'Take Nodes',
         storage: NodesStorage(),
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
