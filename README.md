@@ -8,6 +8,9 @@ A note-taking app with a hierarquical twist. Made in flutter.
 * add bells and whistles
     * add ability create different lists
     * add visual options
+* qol features
+    * mass delete
+    * move notes
 
 ## Done
 * make UI tolerable
