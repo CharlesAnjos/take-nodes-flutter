@@ -353,6 +353,10 @@ class _MyHomePageState extends State<MyHomePage> {
             tooltip: 'Edit Node',
             onPressed: () => _showNodeFormDialog(true)),
         ActionButton(
+            icon: const Icon(Icons.account_tree),
+            tooltip: 'Add Child Node',
+            onPressed: () => _showNodeFormDialog(false)),
+        ActionButton(
             icon: const Icon(Icons.delete),
             tooltip: 'Delete Node',
             onPressed: () => _showDeleteNodeDialog()),
