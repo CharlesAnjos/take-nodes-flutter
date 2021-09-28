@@ -380,7 +380,9 @@ class _MyHomePageState extends State<MyHomePage> {
     if (newNode != null) {
       if (_selectedNodeKey == null) {
         setState(() {
-          _treeViewController.children.add(newNode);
+          _treeViewController = _treeViewController.copyWith(
+              children: _treeViewController.children + [newNode]);
+          //_treeViewController.children.add(newNode);
           widget.storage.writeNodes(_treeViewController.toString());
         });
       } else {
@@ -431,7 +433,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (BuildContext context) => AlertDialog(
               title: Text('Delete node $nodeLabel?'),
               content: const Text(
-                  'Are you sure? All its children will be deleted. This is irreversible. Long press "Delete Anyway" to confirm.'),
+                  'Are you sure? ALL its children will be deleted. This is irreversible. LONG PRESS "Delete Anyway" to confirm.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.pop(context),

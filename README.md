@@ -6,11 +6,14 @@ A note-taking app with a hierarquical twist. Made in flutter.
 * proper settings screen
     * persist settings
 * add bells and whistles
-    * add ability create different lists
+    * add ability to create different lists
     * add visual options
 * qol features
     * mass delete
     * move notes
+* make UI even more tolerable
+    * maybe substitute the expandable fab for a contextual list
+    * better visual separation of items
 
 ## Done
 * make UI tolerable
