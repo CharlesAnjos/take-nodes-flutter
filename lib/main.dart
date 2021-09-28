@@ -36,7 +36,7 @@ class NodesStorage {
 
   Future<File> get _localFile async {
     final path = await _localPath;
-    return File('$path/nodes.txt');
+    return File('$path/default.txt');
   }
 
   Future<String> readNodes() async {
@@ -428,12 +428,27 @@ class _MyHomePageState extends State<MyHomePage> {
   _showDeleteNodeDialog() async {
     Node? selectedNode = _treeViewController.selectedNode;
     String nodeLabel = selectedNode!.label;
+    const TextStyle alertStyle =
+        TextStyle(fontWeight: FontWeight.bold, color: Colors.red);
     await showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
               title: Text('Delete node $nodeLabel?'),
-              content: const Text(
-                  'Are you sure? ALL its children will be deleted. This is irreversible. LONG PRESS "Delete Anyway" to confirm.'),
+              content: const Text.rich(
+                TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(text: 'Are you sure? '),
+                    TextSpan(
+                        text: 'ALL its children will be deleted',
+                        style: alertStyle),
+                    TextSpan(text: '. This is '),
+                    TextSpan(text: 'irreversible', style: alertStyle),
+                    TextSpan(text: '. \n\n'),
+                    TextSpan(text: 'LONG PRESS', style: alertStyle),
+                    TextSpan(text: ' "Delete Anyway" to confirm.'),
+                  ],
+                ),
+              ),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.pop(context),

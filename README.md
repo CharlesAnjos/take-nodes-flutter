@@ -11,6 +11,7 @@ A note-taking app with a hierarquical twist. Made in flutter.
 * qol features
     * mass delete
     * move notes
+    * export/import text files
 * make UI even more tolerable
     * maybe substitute the expandable fab for a contextual list
     * better visual separation of items
