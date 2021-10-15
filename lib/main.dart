@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/gestures.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -74,8 +75,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final nodeNameController = TextEditingController();
-
   String? _selectedNodeKey;
+
   //List<Node> _nodes = [];
   TreeViewController _treeViewController = new TreeViewController();
   final Map<ExpanderPosition, Widget> expansionPositionOptions = const {
@@ -293,7 +294,9 @@ class _MyHomePageState extends State<MyHomePage> {
             _treeViewController = _treeViewController.copyWith(selectedKey: "");
           });
         },
-        //onLongPress: () => _showNodeFormDialog(false),
+        onLongPress: () {
+          print("long pressed something");
+        },
         child: Container(
           height: double.infinity,
           child: Column(
@@ -311,9 +314,24 @@ class _MyHomePageState extends State<MyHomePage> {
                         controller: _treeViewController,
                         allowParentSelect: _allowParentSelect,
                         supportParentDoubleTap: _supportParentDoubleTap,
+                        nodeBuilder: (context, node) {
+                          return GestureDetector(
+                            child: Container(
+                              padding: EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(node.label),
+                            ),
+                            onLongPressStart: (LongPressStartDetails details) {
+                              _onLongPressStartHandler(node, details);
+                            },
+                          );
+                        },
                         onExpansionChanged: (key, expanded) =>
                             _expandNode(key, expanded),
                         onNodeTap: (key) {
+                          print('node was tapped');
                           setState(() {
                             //_expanderColor = Colors.white;
                             _selectedNodeKey = key;
@@ -322,7 +340,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           });
                         },
                         onNodeDoubleTap: (key) {
-                          debugPrint('the node was DPed (lol)');
+                          print("double tapped " + key);
                         },
                         theme: _treeViewTheme,
                       ),
@@ -335,6 +353,57 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton:
           _selectedNodeKey == null ? _singleFab() : _expandableFab(),
+    );
+  }
+
+  _onLongPressStartHandler(node, details) {
+    Offset _tapPosition = details.globalPosition;
+    print("longpressed " + node.label);
+    setState(() {
+      //_expanderColor = Colors.white;
+      _selectedNodeKey = node.key;
+      _treeViewController = _treeViewController.copyWith(selectedKey: node.key);
+    });
+    showMenu(
+      //shape: CircleBorder(),
+      position:
+          RelativeRect.fromLTRB(_tapPosition.dx, _tapPosition.dy, 0.0, 0.0),
+      items: <PopupMenuEntry>[
+        PopupMenuItem(
+          padding: EdgeInsets.all(0),
+          value: node.key,
+          child: TextButton.icon(
+              label: const Text('Edit Node'),
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                Navigator.pop(context);
+                _showNodeFormDialog(true);
+              }),
+        ),
+        PopupMenuItem(
+          padding: EdgeInsets.all(0),
+          value: node.key,
+          child: TextButton.icon(
+              icon: const Icon(Icons.account_tree),
+              label: const Text('Add Child Node'),
+              onPressed: () {
+                Navigator.pop(context);
+                _showNodeFormDialog(false);
+              }),
+        ),
+        PopupMenuItem(
+          padding: EdgeInsets.all(0),
+          value: node.key,
+          child: TextButton.icon(
+              icon: const Icon(Icons.delete),
+              label: const Text('Delete Node'),
+              onPressed: () {
+                Navigator.pop(context);
+                _showDeleteNodeDialog();
+              }),
+        ),
+      ],
+      context: context,
     );
   }
 
