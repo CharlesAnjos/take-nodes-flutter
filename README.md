@@ -13,12 +13,12 @@ A note-taking app with a hierarquical twist. Made in flutter.
     * move notes
     * export/import text files
 * make UI even more tolerable
-    * maybe substitute the expandable fab for a contextual list
     * better visual separation of items
 
 ## Done
-* make UI tolerable
-* add persistency
+* made UI even more tolerable with popup menus for item interactions
+* made UI tolerable
+* added persistency
 * basic listing functions
 * basic crud functions
 
