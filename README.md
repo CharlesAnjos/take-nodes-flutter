@@ -12,6 +12,7 @@ A note-taking app with a hierarquical twist. Made in flutter.
     * mass delete
     * move notes
     * export/import text files
+    * add option to create secret lists
 * make UI even more tolerable
     * better visual separation of items
 
