@@ -319,7 +319,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Container(
                               padding: EdgeInsets.all(15),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
+                                //borderRadius: BorderRadius.circular(10),
+                                border: Border(
+                                    left: BorderSide(
+                                        color: Colors.blueGrey.shade100),
+                                    bottom: BorderSide(
+                                        color: Colors.blueGrey.shade100)),
                               ),
                               child: Text(node.label),
                             ),
