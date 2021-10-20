@@ -316,18 +316,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         supportParentDoubleTap: _supportParentDoubleTap,
                         nodeBuilder: (context, node) {
                           return GestureDetector(
-                            child: Container(
-                              padding: EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                //borderRadius: BorderRadius.circular(10),
-                                border: Border(
-                                    left: BorderSide(
-                                        color: Colors.blueGrey.shade100),
-                                    bottom: BorderSide(
-                                        color: Colors.blueGrey.shade100)),
-                              ),
-                              child: Text(node.label),
-                            ),
+                            child: Card(
+                                color: Colors.grey.shade100.withAlpha(200),
+                                child: Container(
+                                  padding: EdgeInsets.all(15),
+                                  child: Text(node.label),
+                                )),
                             onLongPressStart: (LongPressStartDetails details) {
                               _onLongPressStartHandler(node, details);
                             },
