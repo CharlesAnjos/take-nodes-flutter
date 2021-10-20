@@ -307,7 +307,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    //padding: EdgeInsets.all(10),
                     child: Container(
                       child: TreeView(
                         shrinkWrap: true,
