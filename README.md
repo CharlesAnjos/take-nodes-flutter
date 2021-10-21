@@ -8,16 +8,31 @@ A note-taking app with a hierarquical twist. Made in flutter.
 * add bells and whistles
     * add ability to create different lists
     * add visual options
+        * colors for individual nodes
+            * children nodes use a gradient of this color
+    * add items to nodes
+        * longer texts
+        * images
+        * locations
+        * alarms
+        * timers
+        * etc
+    * some tutorials would be nice
 * qol features
     * mass delete
-    * move notes
+    * move nodes
     * export/import text files
     * add option to create secret lists
-* make UI even more tolerable
-    * better visual separation of items
+    * visualization filters
+* user feedback
+    * highlight change of function of floating action button when a node is selected
+    * add expand/contract buttons to a dropdown accessed by a kebab menu button
+    * 
 
 ## Done
-* made UI even more tolerable with popup menus for item interactions
+
+* made UI even even more tolerable, withh better visual separation of nodes achieved by using cards instead of whatever i was using before
+* made UI even more tolerable with popup menus for node interactions
 * made UI tolerable
 * added persistency
 * basic listing functions
