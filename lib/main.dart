@@ -299,14 +299,15 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         child: Container(
           height: double.infinity,
+          color: Colors.grey,
           child: Column(
             children: <Widget>[
               Expanded(
                 child: Container(
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                        //borderRadius: BorderRadius.circular(10),
+                        ),
                     child: Container(
                       child: TreeView(
                         shrinkWrap: true,
@@ -316,11 +317,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         nodeBuilder: (context, node) {
                           return GestureDetector(
                             child: Card(
-                                color: Colors.grey.shade100.withAlpha(200),
+                                //color: Colors.grey.shade100.withAlpha(200),
                                 child: Container(
-                                  padding: EdgeInsets.all(15),
-                                  child: Text(node.label),
-                                )),
+                              padding: EdgeInsets.all(15),
+                              child: Text(node.label),
+                            )),
                             onLongPressStart: (LongPressStartDetails details) {
                               _onLongPressStartHandler(node, details);
                             },
