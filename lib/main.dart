@@ -239,26 +239,32 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.expand_more),
-            tooltip: 'Expand all nodes',
-            onPressed: () {
-              setState(() {
-                _treeViewController = _treeViewController.copyWith(
-                    children: _treeViewController.expandAll());
-              });
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.expand_less),
-            tooltip: 'Collapse all nodes',
-            onPressed: () {
-              setState(() {
-                _treeViewController = _treeViewController.copyWith(
-                    children: _treeViewController.collapseAll());
-              });
-            },
-          ),
+          PopupMenuButton(itemBuilder: (BuildContext context) {
+            return <PopupMenuEntry>[
+              PopupMenuItem(
+                child: TextButton(
+                  child: Text("Expand all"),
+                  onPressed: () {
+                    setState(() {
+                      _treeViewController = _treeViewController.copyWith(
+                          children: _treeViewController.expandAll());
+                    });
+                  },
+                ),
+              ),
+              PopupMenuItem(
+                child: TextButton(
+                  child: Text("Collapse all"),
+                  onPressed: () {
+                    setState(() {
+                      _treeViewController = _treeViewController.copyWith(
+                          children: _treeViewController.collapseAll());
+                    });
+                  },
+                ),
+              ),
+            ];
+          })
         ],
         elevation: 0,
       ),
