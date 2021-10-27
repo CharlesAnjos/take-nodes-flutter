@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Take Nodes',
       home: MyHomePage(
         title: 'Take Nodes',
         storage: NodesStorage(),
@@ -79,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //List<Node> _nodes = [];
   TreeViewController _treeViewController = new TreeViewController();
+
   final Map<ExpanderPosition, Widget> expansionPositionOptions = const {
     ExpanderPosition.start: Text('Start'),
     ExpanderPosition.end: Text('End'),
@@ -108,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ExpanderModifier _expanderModifier = ExpanderModifier.none;
   bool _allowParentSelect = true;
   bool _supportParentDoubleTap = true;
+  double _fontSize = 16;
 
   @override
   void dispose() {
@@ -208,6 +209,57 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Row _fontSizeSelector(TreeViewTheme _treeViewTheme) {
+    return Row(
+      //mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.fromLTRB(7, 0, 20, 0),
+          child: Text(
+            "Font Size",
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        Container(
+          child: IconButton(
+            onPressed: () {
+              setState(() {
+                TextStyle newTextStyle = _treeViewTheme.labelStyle;
+                _fontSize++;
+                newTextStyle = newTextStyle.copyWith(fontSize: _fontSize);
+                _treeViewTheme =
+                    _treeViewTheme.copyWith(labelStyle: newTextStyle);
+              });
+            },
+            icon: Icon(
+              Icons.add,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              TextStyle newTextStyle = _treeViewTheme.labelStyle;
+              _fontSize--;
+              newTextStyle = newTextStyle.copyWith(fontSize: _fontSize);
+              _treeViewTheme =
+                  _treeViewTheme.copyWith(labelStyle: newTextStyle);
+            });
+          },
+          icon: Icon(
+            Icons.remove,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     TreeViewTheme _treeViewTheme = TreeViewTheme(
@@ -220,20 +272,21 @@ class _MyHomePageState extends State<MyHomePage> {
         //color: _expanderColor
       ),
       labelStyle: TextStyle(
-        fontSize: 16,
+        fontSize: _fontSize,
         letterSpacing: 0.3,
       ),
       parentLabelStyle: TextStyle(
-        fontSize: 16,
+        fontSize: _fontSize,
         letterSpacing: 0.3,
         //fontWeight: FontWeight.w800,
         //color: Colors.blue.shade700,
       ),
       iconTheme: IconThemeData(
-        size: 18,
+        size: 15,
         color: Colors.grey.shade800,
       ),
       colorScheme: Theme.of(context).colorScheme,
+      //verticalSpacing: 20,
     );
     return Scaffold(
       appBar: AppBar(
@@ -262,6 +315,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     });
                   },
                 ),
+              ),
+              PopupMenuItem(
+                enabled: false,
+                child: _fontSizeSelector(_treeViewTheme),
               ),
             ];
           })
@@ -316,6 +373,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                     child: Container(
                       child: TreeView(
+                        theme: _treeViewTheme,
+                        key: UniqueKey(),
                         shrinkWrap: true,
                         controller: _treeViewController,
                         allowParentSelect: _allowParentSelect,
@@ -325,9 +384,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Card(
                                 //color: Colors.grey.shade100.withAlpha(200),
                                 child: Container(
-                              padding: EdgeInsets.all(15),
-                              child: Text(node.label),
-                            )),
+                                    padding: EdgeInsets.all(10),
+                                    child: Text(
+                                      node.label,
+                                      style: _treeViewTheme.labelStyle,
+                                    ),
+                                    key: UniqueKey())),
                             onLongPressStart: (LongPressStartDetails details) {
                               _onLongPressStartHandler(node, details);
                             },
@@ -347,9 +409,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         onNodeDoubleTap: (key) {
                           print("double tapped " + key);
                         },
-                        theme: _treeViewTheme,
                       ),
-                      key: ValueKey(_selectedNodeKey),
+                      key: UniqueKey(),
                     )),
               ),
             ],
