@@ -109,6 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _allowParentSelect = true;
   bool _supportParentDoubleTap = true;
   double _fontSize = 16;
+  double _cardPadding = 10;
 
   @override
   void dispose() {
@@ -209,7 +210,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Row _fontSizeSelector(TreeViewTheme _treeViewTheme) {
+  _fontSizeSetter(TreeViewTheme treeViewTheme) {
+    TextStyle newTextStyle = treeViewTheme.labelStyle;
+    newTextStyle = newTextStyle.copyWith(fontSize: _fontSize);
+    treeViewTheme = treeViewTheme.copyWith(labelStyle: newTextStyle);
+  }
+
+  Row _fontSizeSelector(TreeViewTheme treeViewTheme) {
     return Row(
       //mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -228,11 +235,8 @@ class _MyHomePageState extends State<MyHomePage> {
           child: IconButton(
             onPressed: () {
               setState(() {
-                TextStyle newTextStyle = _treeViewTheme.labelStyle;
                 _fontSize++;
-                newTextStyle = newTextStyle.copyWith(fontSize: _fontSize);
-                _treeViewTheme =
-                    _treeViewTheme.copyWith(labelStyle: newTextStyle);
+                _fontSizeSetter(treeViewTheme);
               });
             },
             icon: Icon(
@@ -244,11 +248,66 @@ class _MyHomePageState extends State<MyHomePage> {
         IconButton(
           onPressed: () {
             setState(() {
-              TextStyle newTextStyle = _treeViewTheme.labelStyle;
-              _fontSize--;
-              newTextStyle = newTextStyle.copyWith(fontSize: _fontSize);
-              _treeViewTheme =
-                  _treeViewTheme.copyWith(labelStyle: newTextStyle);
+              if (_fontSize > 0) {
+                _fontSize--;
+                _fontSizeSetter(treeViewTheme);
+                if (_fontSize < 5) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("You dropped this: 🔍")));
+                }
+              }
+            });
+          },
+          icon: Icon(
+            Icons.remove,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row _cardPaddingSelector() {
+    return Row(
+      //mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.fromLTRB(7, 0, 20, 0),
+          child: Text(
+            "Card Size",
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        Container(
+          child: IconButton(
+            onPressed: () {
+              setState(() {
+                _cardPadding++;
+              });
+            },
+            icon: Icon(
+              Icons.add,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              if (_cardPadding > 0) {
+                setState(() {
+                  _cardPadding--;
+                });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Minimum Card Size reached"),
+                  backgroundColor: Colors.red,
+                ));
+              }
             });
           },
           icon: Icon(
@@ -320,6 +379,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 enabled: false,
                 child: _fontSizeSelector(_treeViewTheme),
               ),
+              PopupMenuItem(
+                enabled: false,
+                child: _cardPaddingSelector(),
+              ),
             ];
           })
         ],
@@ -384,7 +447,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Card(
                                 //color: Colors.grey.shade100.withAlpha(200),
                                 child: Container(
-                                    padding: EdgeInsets.all(10),
+                                    padding: EdgeInsets.all(_cardPadding),
                                     child: Text(
                                       node.label,
                                       style: _treeViewTheme.labelStyle,
